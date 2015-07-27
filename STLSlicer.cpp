@@ -1,43 +1,51 @@
+#include "wx/wxprec.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/wx.h"
+#endif
+
+#include "STLSlicer.h"
+#include "MainFrame.h"
+#include "PreviewGLCanvas.h"
+
 #include <iostream>
 #include <cstdlib>
 #include "Model.h"
 #include "ThreeDPoint.h"
 
-
 void printExtents(const std::vector<ThreeDPoint>&);
 
+IMPLEMENT_APP(STLSlicer)
 
-int main (int argc, char *argv[]){
+bool STLSlicer::OnInit()
+{
+//    Args(argc, argv); 
+    MainFrame *frame = new MainFrame(0);
 
-	/*params:
-		int numberOfSlices
-		std::string modelPath
-		std::string folderOutputPath
-	*/
-	
-	int numberOfSlices = 20; 
-	std::string modelPath = "/home/pas/CppProjects/stlslicer/eiffel.stl";
-	std::string folderOutputPath = "/home/pas/CppProjects/stlslicer/SliceOutput/";
-	
-	//Create Model object
-	
-	Model myModel{modelPath};
-	
-	//load the data into the model object
-	if (!myModel.loadModel()){
-		std::cerr << "The data could not be loaded into the model.\n";
-		return 1;
-	}
-	
-	//print extents
-	std::vector<ThreeDPoint> extents{myModel.getExtents()};
-	printExtents(extents);
+    SetTopWindow(frame);
 
-	//produce svg output
-	myModel.slice(numberOfSlices, folderOutputPath);
+    int numberOfSlices = 20; 
+    std::string modelPath = "./input.stl";
+    std::string folderOutputPath = "./SliceOutput/";
 
+    //Create Model object
 
-	return 0;
+    Model myModel{modelPath};
+
+    //load the data into the model object
+    if (!myModel.loadModel()){
+            std::cerr << "The data could not be loaded into the model.\n";
+            return 1;
+    }
+
+    //print extents
+    std::vector<ThreeDPoint> extents{myModel.getExtents()};
+    printExtents(extents);
+
+    //produce svg output
+    myModel.slice(numberOfSlices, folderOutputPath);
+
+    return 0;
 }
 
 void printExtents(const std::vector<ThreeDPoint>& extents){
