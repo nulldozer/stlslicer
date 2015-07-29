@@ -20,32 +20,28 @@ IMPLEMENT_APP(STLSlicer)
 bool STLSlicer::OnInit()
 {
 //    Args(argc, argv); 
-    MainFrame *frame = new MainFrame(0);
-
+    Model *myModel = new Model();
+    MainFrame *frame = new MainFrame(0,-1,myModel);
     SetTopWindow(frame);
-
+    
+// TODO switch to slice thickness instead of numberOfSlices
+// TODO obtain numberOfSlices from SpinCtrls
     int numberOfSlices = 20; 
+// TODO set output path using the export dialog 
+
     std::string modelPath = "./input.stl";
     std::string folderOutputPath = "./SliceOutput/";
 
-    //Create Model object
-
-    Model myModel{modelPath};
-
-    //load the data into the model object
-    if (!myModel.loadModel()){
-            std::cerr << "The data could not be loaded into the model.\n";
-            return 1;
-    }
-
     //print extents
-    std::vector<ThreeDPoint> extents{myModel.getExtents()};
-    printExtents(extents);
+//    std::vector<ThreeDPoint> extents{myModel.getExtents()};
+//    printExtents(extents);
+
+//TODO produce output only on Button click
 
     //produce svg output
-    myModel.slice(numberOfSlices, folderOutputPath);
+//    myModel.slice(numberOfSlices, folderOutputPath);
 
-    return 0;
+    return true;
 }
 
 void printExtents(const std::vector<ThreeDPoint>& extents){

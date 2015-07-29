@@ -1,12 +1,12 @@
+#ifndef _TESTGLCANVAS_H
+#define _TESTGLCANVAS_H
+
 #ifndef _WXPREC_H
     #include "wx/wxprec.h"
 #endif
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
-
-#ifndef _TESTGLCANVAS_H
-#define _TESTGLCANVAS_H
 
 #include "wx/glcanvas.h"
 #include "wx/math.h"
@@ -24,14 +24,9 @@
 #   include <GL/glu.h>
 #endif
 
-static GLboolean speed_test = GL_FALSE;
-static GLboolean use_vertex_arrays = GL_FALSE;
+#include <vector>
 
-static GLboolean doubleBuffer = GL_TRUE;
-
-static GLboolean smooth = GL_TRUE;
-static GLboolean lighting = GL_TRUE;
-
+#include "Model.h"
 
 #define MAXVERTS 10000
 
@@ -42,6 +37,11 @@ static GLint numverts;
 static GLfloat xrot;
 static GLfloat yrot;
 
+static GLboolean speed_test = GL_FALSE;
+static GLboolean use_vertex_arrays = GL_FALSE;
+static GLboolean doubleBuffer = GL_TRUE;
+static GLboolean smooth = GL_TRUE;
+static GLboolean lighting = GL_TRUE;
 
 class PreviewGLCanvas : public wxGLCanvas {
     private:
@@ -49,9 +49,14 @@ class PreviewGLCanvas : public wxGLCanvas {
         void draw_surface();
         void draw1();
         void InitMaterials();
+
         wxGLContext *m_glContext;
         wxWindow *m_parentWindow;
+        Model *m_model;
+        
     public:
+        
+        void setModel(Model *model);
         PreviewGLCanvas
         (
             wxWindow *parent,

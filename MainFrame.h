@@ -18,18 +18,21 @@
 #include <wx/frame.h>
 #include <wx/statusbr.h>
 
+#include <iostream>
+#include <wx/string.h>
+
 #include "PreviewGLCanvas.h"
+#include "Model.h"
 
 class MainFrame : public wxFrame
 {
     public:
-        MainFrame(wxWindow* parent,wxWindowID id = -1);
+        MainFrame(wxWindow* parent,wxWindowID id = -1,Model *model=NULL);
 
         virtual ~MainFrame();
 
         PreviewGLCanvas *m_canvas;
         wxGLContext *glContext;
-
         void OnMenuFileOpen(wxCommandEvent &event);
         void OnMenuFileQuit(wxCommandEvent &event);
         void OnMenuFileSave(wxCommandEvent &event);
@@ -41,6 +44,8 @@ class MainFrame : public wxFrame
         DECLARE_EVENT_TABLE();
 
     private:
+        Model *m_model;
+
         wxMenuBar *pMenuBar;
         wxMenu *pFileMenu;
         wxMenu *pHelpMenu;

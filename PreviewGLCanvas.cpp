@@ -1,5 +1,5 @@
 #include "PreviewGLCanvas.h"
-
+//TODO get rid of this function
 void PreviewGLCanvas::read_surface( const wxChar *filename )
 {
 #ifdef DEBUG_FUNCTION_CALLS
@@ -36,26 +36,42 @@ void PreviewGLCanvas::draw_surface()
 #ifdef DEBUG_FUNCTION_CALLS
     printf("void PreviewGLCanvas::draw_surface()\n");
 #endif
+    GLfloat vert[3];
+    GLfloat norm[3];
     this->SetCurrent(*m_glContext);
     GLint i;
-/*
-#ifdef GL_EXT_vertex_array
-    if (use_vertex_arrays)
-    {
-        glDrawArraysEXT( GL_TRIANGLE_STRIP, 0, numverts );
-    }
-    else
-#endif
-*/
-    {
-        glBegin( GL_TRIANGLE_STRIP );
-        for (i=0;i<numverts;i++)
+    
+    glBegin( GL_TRIANGLE_STRIP );
+
+    if(m_model != NULL) {
+        for (std::vector<Facet>::const_iterator it = m_model->getFacets().begin(); 
+                it != m_model->getFacets().end(); it++)
         {
-            glNormal3fv( norms[i] );
-            glVertex3fv( verts[i] );
+            //repeat the normal three times? I guess?
+            norm[0]=(*it).getNormal().getX();
+            norm[1]=(*it).getNormal().getY();
+            norm[2]=(*it).getNormal().getZ();
+
+            vert[0]=(*it).getPointOne().getX();
+            vert[1]=(*it).getPointOne().getY();
+            vert[2]=(*it).getPointOne().getZ();
+            glNormal3fv(norm); 
+            glVertex3fv(vert);
+            vert[0]=(*it).getPointTwo().getX();
+            vert[1]=(*it).getPointTwo().getY();
+            vert[2]=(*it).getPointTwo().getZ();
+            glNormal3fv(norm); 
+            glVertex3fv(vert); 
+            vert[0]=(*it).getPointThree().getX();
+            vert[1]=(*it).getPointThree().getY();
+            vert[2]=(*it).getPointThree().getZ();
+            glNormal3fv(norm); 
+            glVertex3fv(vert);
+           // glNormal3fv( norms[i] );
+           // glVertex3fv( verts[i] );
         }
-        glEnd();
     }
+    glEnd();
 }
 
 
@@ -224,6 +240,7 @@ PreviewGLCanvas::PreviewGLCanvas (
         palette
         )
 {
+    m_model = NULL;
 #ifdef DEBUG_FUNCTION_CALLS
     printf("PreviewGLCanvas::PreviewGLCanvas(...)\n");
 #endif
@@ -252,7 +269,6 @@ void PreviewGLCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 #endif
 
     if(m_parentWindow->IsShown()) {
-//printf("\tm_glContext: %p\n", m_glContext); 
        // SetCurrent(*m_glContext);
     }
 
@@ -347,7 +363,6 @@ void PreviewGLCanvas::OnMouseEvent(wxMouseEvent& event)
     static int dragging = 0;
     static float last_x, last_y;
 
-    //printf("%f %f %d\n", event.GetX(), event.GetY(), (int)event.LeftIsDown());
     if(event.LeftIsDown())
     {
         if(!dragging)
@@ -374,4 +389,8 @@ void PreviewGLCanvas::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
     printf("void PreviewGLCanvas::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )\n");
 #endif
     // Do nothing, to avoid flashing.
+}
+
+void PreviewGLCanvas::setModel(Model *model) {
+    m_model = model;
 }

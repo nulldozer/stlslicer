@@ -1,4 +1,3 @@
-	
 #include "Slicer.h"
 	
 Slicer::Slicer(const Model *myModel, int numberOfSlices, std::string folderOutputPath) : mMyModel{myModel}, mNumberOfSlices{numberOfSlices}, mFolderOutputPath{folderOutputPath} {

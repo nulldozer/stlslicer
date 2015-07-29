@@ -1,14 +1,16 @@
-	
 #include "Model.h"
 
 #include "Slicer.h" //have to include in body as Slicer.h includes Model.h; circular inclusion
 	
 //constructor definition
-Model::Model(std::string filePath): mFilePath{filePath} {
-
+Model::Model() {
 }
-
-bool Model::loadModel(){
+const std::vector<Facet>& Model::getFacets() {  
+    const std::vector<Facet> &facetRef = mFacets;
+    return mFacets;
+}
+bool Model::loadModel(std::string filePath) {
+        mFilePath = filePath;
 	//check if model already loaded
 	if (mModelLoaded){
 		return true;
@@ -16,7 +18,6 @@ bool Model::loadModel(){
 	try {
 		//use an STLParser object to load the file
 		STLParser binarySTLParser{mFilePath};
-
 		mNumberOfFacets = binarySTLParser.getNumberOfFacets();
 	
 		//populate the container
@@ -56,10 +57,10 @@ bool Model::slice(int numberOfSlices, std::string outputPath){
 
 bool Model::reloadModel(){
 	if (!mModelLoaded){
-		return (loadModel());
+		return false; 
 	}
 	resetModel();
-	return (loadModel());
+	return (loadModel(mFilePath));
 }
 
 //TODO broken; incorrect results

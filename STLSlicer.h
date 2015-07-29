@@ -1,3 +1,6 @@
+#ifndef _STLSLICER_H
+#define _STLSLICER_H
+
 #ifndef _WXPREC_H
     #include "wx/wxprec.h"
 #endif
@@ -5,11 +8,12 @@
     #include "wx/wx.h"
 #endif
 
-#ifndef _STLSLICER_H
-#define _STLSLICER_H
+#include <iostream>
 
 class STLSlicer : public wxApp
 {
+    private:
+        
     public:
         virtual bool OnInit();
 };

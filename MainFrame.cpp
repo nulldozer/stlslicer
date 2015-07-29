@@ -36,9 +36,9 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	EVT_MENU(wxID_ABOUT, MainFrame::OnMenuHelpAbout)
 END_EVENT_TABLE()
 
-MainFrame::MainFrame(wxWindow* parent, wxWindowID id)
+MainFrame::MainFrame(wxWindow* parent, wxWindowID id, Model *model)
 {
-
+    m_model = model;
     pMenuBar = new wxMenuBar;
     pFileMenu = new wxMenu;
     pHelpMenu = new wxMenu;
@@ -212,24 +212,35 @@ this (MainFrame)
 }
 MainFrame::~MainFrame()
 {
-
+    
 }
 
 
 void MainFrame::OnMenuFileOpen(wxCommandEvent &event)
 {
-/*
     wxFileDialog *OpenDialog= new wxFileDialog(this, _T("Choose a file"), _(""), _(""), _("*.*"), wxFD_OPEN);
     if ( OpenDialog->ShowModal() == wxID_OK )
     {
-        m_pTextCtrl->LoadFile(OpenDialog->GetPath()) ?
-                SetStatusText(_T("Loaded")) :
-                SetStatusText(_T("Load Failed")) ;
+        if(wxFileExists(OpenDialog->GetPath())) { 
+            wxString statusText = OpenDialog->GetPath();
+//TODO wrap in try/catch
+//watch out for m_model = NULL
+        std::string(OpenDialog->GetPath()).c_str());
+            if(m_model->loadModel(std::string(OpenDialog->GetPath()))) {
+                statusText.Prepend("Opened ");
+                SetStatusText(statusText);
+                m_canvas->setModel(m_model);
+            } else {
+                statusText.Prepend("Failed to open ");
+                SetStatusText(statusText);
+            } 
+        } else {
+            SetStatusText(_T("Load Failed"));
+        }
+    } else {
     }
     OpenDialog->Close(); // Or OpenDialog->Destroy() ?
-*/
 }
-
 void MainFrame::OnMenuFileSave(wxCommandEvent &event)
 {
 //TODO: if( hasn't been saved yet ) use dialog, else, just save

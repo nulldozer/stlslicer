@@ -30,9 +30,9 @@ class Model {
 	
 	public:
 		//constructor
-		Model(std::string filePath);
+                Model();
 
-		bool loadModel();
+		bool loadModel(std::string filePath);
 		bool reloadModel();
 
 		//TODO incorrect results with this function
@@ -49,6 +49,8 @@ class Model {
 		//declare Slicer a friend class so that it may access 
 		//	the potentially large mFacets vector without the need to copy
 		friend class Slicer;
+
+                const std::vector<Facet>& getFacets();
 };
 
 #endif
